@@ -42,7 +42,7 @@
                       <field name="nbr_hours"/>
                   </group>
                  <group>
-                     <field name="overtime_reason"/>
+                     <field name="overtime_reason" required='True'/>
                      <field name="leave_manager_id" readonly="1" required='True'/>
                  </group>
              </group>
