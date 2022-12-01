@@ -17,7 +17,7 @@ class airo_overtime_request(models.Model):
     date_to = fields.Datetime(string='To', required=True)
     overtime_reason = fields.Text(string='Reason')
     nbr_hours = fields.Float('Hours', compute='_get_nbr_hours')
-    leave_manager_id = fields.Char(string='Approver', required=True)
+    leave_manager_id = fields.Char(string='Approver')
     leave_manager = fields.Char(related='employee_id.leave_manager_id.name', readonly=True)
     leave_manager_email = fields.Char(related='employee_id.leave_manager_id.work_email')
     leave_type = fields.Selection([('rwd', 'Regular Work Days'), ('snwd', 'Special Non-Working Day'), ('regholiday', 'Regular Holiday'), ('regholidayot','Regular Holiday OT')], 'Overtime Type', default='rwd',
