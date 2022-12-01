@@ -1,0 +1,31 @@
+<odoo>
+    <data>
+        <record id="view_airo_hr_payslip_attendance_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.form.inherit</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='worked_days_input']" position="after">
+                     <page string="Attendance" name="attendance">
+                         <field name="attendance_ids">
+                         </field>
+                     </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_airo_hr_payslip_overtime_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.form.inherit</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='worked_days_input']" position="after">
+                     <page string="Overtime" name="overtime">
+                         <field name="overtime_ids">
+                         </field>
+                     </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

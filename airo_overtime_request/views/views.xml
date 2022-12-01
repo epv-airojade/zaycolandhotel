@@ -1,0 +1,119 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="airo_overtime_request.list">
+      <field name="name">Overtime Request list</field>
+      <field name="model">airo.overtime.request</field>
+      <field name="arch" type="xml">
+        <tree multi_edit="1">
+            <field name="name_seq"/>
+            <field name="leave_type"/>
+            <field name="employee_id"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="nbr_hours"/>
+            <field name="state" readonly="0"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="airo_overtime_request.form">
+      <field name="name">Overtime Request Form</field>
+      <field name="model">airo.overtime.request</field>
+      <field name="arch" type="xml">
+        <form>
+         <header>
+                <button string="Submit" name="to_confirm" type="object"  states="draft" class="oe_highlight"/>
+                <button string="Approved" groups="hr.group_hr_user" name="is_approved" type="object"  states="to_approve" class="oe_highlight"/>
+                <button string="Reject" groups="hr.group_hr_user" name="to_reject" type="object"  states="to_approve, approved" class="oe_highlight"/>
+                <button string="Draft" name="to_draft" type="object"  states="to_approve,approved,rejected" class="oe_highlight"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved,rejected"/>
+         </header>
+         <sheet>
+             <div class="oe_title" name="title">
+                    <h1><field name="employee_id" placeholder="Employee"/></h1>
+             </div>
+             <group>
+                  <group>
+                     <field name="leave_type"/>
+                     <field name="date_from"/>
+                     <field name="date_to"/>
+                      <field name="nbr_hours"/>
+                  </group>
+                 <group>
+                     <field name="overtime_reason"/>
+                     <field name="leave_manager_id" readonly="1"/>
+                 </group>
+             </group>
+
+         </sheet>
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="airo_overtime_request.action_window">
+      <field name="name">Overtime Request</field>
+      <field name="res_model">airo.overtime.request</field>
+      <field name="view_mode">tree,form</field>
+<!--      <field name="view_id" ref="airo_overtime_request.list"/>-->
+<!--      <field name="target">new</field>-->
+    </record>
+
+    <record model="ir.ui.view" id="airo_overtime_request.search">
+      <field name="name">Overtime Request Search</field>
+      <field name="model">airo.overtime.request</field>
+      <field name="arch" type="xml">
+        <search>
+            <field name="name_seq"/>
+            <field name="leave_type"/>
+            <field name="employee_id"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="nbr_hours"/>
+            <field name="state"/>
+        </search>
+      </field>
+    </record>
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="airo_overtime_request.action_server">
+      <field name="name">airo_overtime_request server</field>
+      <field name="model_id" ref="model_airo_overtime_request_airo_overtime_request"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="airo_overtime_request" id="airo_overtime_request.menu_root"/>
+-->
+    <!-- menu categories -->
+
+    <menuitem name="Overtime Request" id="airo_overtime_request.menu_root" action="airo_overtime_request.action_window" web_icon="airo_overtime_request,static/description/icon.png"/>
+<!--
+    <menuitem name="Menu 1" id="airo_overtime_request.menu_1" parent="airo_overtime_request.menu_root"/>
+    <menuitem name="Menu 2" id="airo_overtime_request.menu_2" parent="airo_overtime_request.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="airo_overtime_request.menu_1_list" parent="airo_overtime_request.menu_1"
+              action="airo_overtime_request.action_window"/>
+    <menuitem name="Server to list" id="airo_overtime_request" parent="airo_overtime_request.menu_2"
+              action="airo_overtime_request.action_server"/>
+-->
+  </data>
+</odoo>
