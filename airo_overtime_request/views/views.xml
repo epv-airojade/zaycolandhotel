@@ -43,7 +43,7 @@
                   </group>
                  <group>
                      <field name="overtime_reason"/>
-                     <field name="leave_manager_id" readonly="1"/>
+                     <field name="leave_manager_id" readonly="1" required='True'/>
                  </group>
              </group>
 
