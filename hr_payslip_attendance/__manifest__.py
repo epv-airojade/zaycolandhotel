@@ -27,6 +27,7 @@
         'views/hr_payslip_attendance.xml',
         'views/hr_contract.xml',
         'data/hr_payslip_report.xml',
+        'data/report_payslip_templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [],
