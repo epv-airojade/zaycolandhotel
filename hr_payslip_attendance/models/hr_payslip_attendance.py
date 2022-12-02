@@ -49,6 +49,7 @@ class HrPayslipAttendance(models.Model):
         # create pdf attachment in database
         self.env['ir.attachment'].sudo().create(attachments_vals_list)
         file_dict = []
+        # file_dict = {}
         if template:
             for att in attachments_vals_list:
                 # get pdf attachment by ids
@@ -64,15 +65,15 @@ class HrPayslipAttendance(models.Model):
                             file_dict.append({
                                 'path': file_path,
                                 'name': file_name,
-                                'id': att['res_id']
+                                'id': file_id
                             })
 
             # encrypt pdf
             for rec in self:
                 if rec == self[-1]:
-                    result = PdfFileWriter()
                     for file_info in file_dict:
                         if file_info:
+                            result = PdfFileWriter()
                             file1 = PdfFileReader(file_info["path"], strict=False, overwriteWarnings=False)
                             length = file1.numPages
                             for i in range(length):
