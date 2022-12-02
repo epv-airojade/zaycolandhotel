@@ -18,6 +18,7 @@ class HrPayslipAttendance(models.Model):
     overtime_ids = fields.One2many('airo.overtime.request', 'employee_id', compute='_onchange_period_attendance',
                                      readonly=True, string='Attendance')
 
+
     @api.depends('date_from', 'date_to')
     def _onchange_period_attendance(self):
         for rec in self:
@@ -27,6 +28,7 @@ class HrPayslipAttendance(models.Model):
     def _generate_pdf(self):
         mapped_reports = self._get_pdf_reports()
         attachments_vals_list = []
+        attachments_vals_list_inherit = []
         generic_name = _("Payslip")
         template = self.env.ref('hr_payslip_attendance.mail_template_new_payslip_inherit', raise_if_not_found=False)
         for report, payslips in mapped_reports.items():
@@ -46,12 +48,21 @@ class HrPayslipAttendance(models.Model):
                     'res_id': payslip.id
                 })
 
+                attachments_vals_list_inherit.append({
+                    'name': pdf_name,
+                    'type': 'binary',
+                    'raw': pdf_content,
+                    'res_model': payslip._name,
+                    'res_id': payslip.id,
+                    'emp': payslip
+                })
+
         # create pdf attachment in database
         self.env['ir.attachment'].sudo().create(attachments_vals_list)
         file_dict = []
         # file_dict = {}
         if template:
-            for att in attachments_vals_list:
+            for att in attachments_vals_list_inherit:
                 # get pdf attachment by ids
                 file = self.env['ir.attachment'].search([('res_model', '=', att['res_model']), ('res_id', '=', att['res_id'])])
                 if file:
@@ -65,7 +76,9 @@ class HrPayslipAttendance(models.Model):
                             file_dict.append({
                                 'path': file_path,
                                 'name': file_name,
-                                'id': file_id
+                                'id': file_id,
+                                'emp': att['emp']
+                                # 'my_id': self.employee_id.id
                             })
 
             # encrypt pdf
@@ -80,7 +93,8 @@ class HrPayslipAttendance(models.Model):
                                 pages = file1.getPage(i)
                                 result.addPage(pages)
                             # password = not self.employee_id.pin and self.employee_id.work_email or self.employee_id.pin
-                            password = rec.employee_id.work_email
+                            password = file_info['emp'].employee_id.work_email
+                            print(password)
                             result.encrypt(password)
                             output = io.BytesIO()
                             result.write(output)
