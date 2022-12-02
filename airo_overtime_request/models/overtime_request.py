@@ -15,7 +15,7 @@ class airo_overtime_request(models.Model):
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True,  default=lambda self: self._get_default_name())
     date_from = fields.Datetime(string='From', required=True)
     date_to = fields.Datetime(string='To', required=True)
-    overtime_reason = fields.Text(string='Reason')
+    overtime_reason = fields.Text(string='Reason', required=True)
     nbr_hours = fields.Float('Hours', compute='_get_nbr_hours')
     leave_manager_id = fields.Char(string='Approver')
     leave_manager = fields.Char(related='employee_id.leave_manager_id.name', readonly=True)
@@ -61,20 +61,19 @@ class airo_overtime_request(models.Model):
     def to_confirm(self):
         self.write({'state': 'to_approve'})
         template = self.env.ref('airo_overtime_request.new_overtime_request_email_template', raise_if_not_found=False)
-        print(template)
         for rec in self:
             template.send_mail(rec.id, email_layout_xmlid='mail.mail_notification_light')
 
     def to_reject(self):
         self.write({'state': 'rejected'})
         template = self.env.ref('airo_overtime_request.approval_overtime_request_email_template', raise_if_not_found=False)
-        print(template)
         for rec in self:
             template.send_mail(rec.id, email_layout_xmlid='mail.mail_notification_light')
 
     def to_draft(self):
         self.write({'state': 'draft'})
 
+    # @api.depends('state')
     def is_approved(self):
         self.write({'state': 'approved'})
         template = self.env.ref('airo_overtime_request.approval_overtime_request_email_template', raise_if_not_found=False)

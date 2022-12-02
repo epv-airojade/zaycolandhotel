@@ -7,13 +7,18 @@
       <field name="model">airo.overtime.request</field>
       <field name="arch" type="xml">
         <tree multi_edit="1">
+            <header>
+                <button string="Approved" groups="hr.group_hr_user" name="is_approved" type="object"  states="to_approve" class="oe_highlight"/>
+                <button string="Reject" groups="hr.group_hr_user" name="to_reject" type="object"  states="to_approve, approved" class="oe_highlight"/>
+                <button string="Draft" name="to_draft" type="object"  states="to_approve,approved,rejected" class="oe_highlight"/>
+            </header>
             <field name="name_seq"/>
             <field name="leave_type"/>
             <field name="employee_id"/>
             <field name="date_from"/>
             <field name="date_to"/>
             <field name="nbr_hours"/>
-            <field name="state" readonly="0"/>
+            <field name="state" readonly="0" widget="badge" decoration-info="state in ('draft','to_approve')" decoration-warning="state == 'rejected'" decoration-success="state == 'approved'" />
         </tree>
       </field>
     </record>
@@ -42,7 +47,7 @@
                       <field name="nbr_hours"/>
                   </group>
                  <group>
-                     <field name="overtime_reason" required='True'/>
+                     <field name="overtime_reason"/>
                      <field name="leave_manager_id" readonly="1" required='True'/>
                  </group>
              </group>
